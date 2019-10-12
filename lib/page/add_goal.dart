@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../model/goals_data.dart';
+
 
 class AddGoal extends StatefulWidget {
-  final Function addGoal;
-
-  AddGoal(this.addGoal);
-
   @override
   _AddGoalState createState() => _AddGoalState();
 }
@@ -35,7 +34,8 @@ class _AddGoalState extends State<AddGoal> {
           ),
           FlatButton(
             onPressed: () {
-              widget.addGoal(titleController.text);
+              Provider.of<GoalData>(context).addGoal(titleController.text);
+              Navigator.pop(context);
             },
             child: Text('Add Goal',
                 style: TextStyle(color: Colors.white,

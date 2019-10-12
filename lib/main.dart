@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import './widget/goal_list.dart';
 import 'page/add_goal.dart';
-import './model/Goal.dart';
+import './model/goals_data.dart';
+
 void main() {
-  runApp(MaterialApp(home: MyApp(), debugShowCheckedModeBanner: false,));
+  runApp(ChangeNotifierProvider(
+    builder: (context) => GoalData(),
+      child: MaterialApp(
+    home: MyApp(),
+    debugShowCheckedModeBanner: false,
+  )));
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
 
-class _MyAppState extends State<MyApp> {
-  final List<Goal> goals = [
-    Goal(title: 'Buy the milk'),
-    Goal(title: 'Buy the coca'),
-    Goal(title: 'Buy the coconut'),
-  ];
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +46,7 @@ class _MyAppState extends State<MyApp> {
                       fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  '12 goals',
+                  '${Provider.of<GoalData>(context).goalCount} goals',
                   style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
               ],
@@ -63,7 +60,7 @@ class _MyAppState extends State<MyApp> {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20))),
-              child: GoalList(goals),
+              child: GoalList(),
             ),
           )
         ],
@@ -72,12 +69,8 @@ class _MyAppState extends State<MyApp> {
           child: Icon(Icons.add),
           onPressed: () {
             showModalBottomSheet(
-                context: context, builder: (context) => AddGoal((titleGoal){
-                  setState(() {
-                    goals.add(Goal(title: titleGoal));
-                  });
-                  Navigator.pop(context);
-            }));
+                context: context,
+                builder: (context) => AddGoal());
           }),
     );
   }
